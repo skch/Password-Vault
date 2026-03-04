@@ -19,7 +19,6 @@ class VaultManager:
 		password = self.ask_new_password(context)
 		keypass = self.generate_keypass(context)
 		secret = self.encrypt_secret(context, keypass, password)
-		self.clear_screen()
 		self.save_config(context, path, secret)
 		return True
 
@@ -73,7 +72,6 @@ class VaultManager:
 		res = self.encrypt_info(context, params['password'], keypass)
 		params['password'] = res['data']
 		params['hint'] = res['salt']
-		self.clear_screen()
 		self.save_account(context, params, path)
 		return True
 
