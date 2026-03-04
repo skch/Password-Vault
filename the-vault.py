@@ -10,7 +10,7 @@ def print_usage():
 
 
 def main():
-	print("Password vault (skch@usa.net) 1.01")
+	print("Password vault (skch@usa.net) 1.02")
 	context = RailsContext()
 	cfg = ConfigManager()
 	if not cfg.read_cmd_line(context):  print_usage()

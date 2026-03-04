@@ -1,14 +1,14 @@
 import json
 import os
+import sys
 from pathlib import Path
 from common.rails_context import RailsContext, railway
 from domain.crypto_manager import CryptoManager
 
-
 class VaultManager:
 
 	def __init__(self):
-		pass
+		os.environ['TERM'] = 'xterm-256color'
 
 	#==============================================
 	@railway
@@ -19,6 +19,7 @@ class VaultManager:
 		password = self.ask_new_password(context)
 		keypass = self.generate_keypass(context)
 		secret = self.encrypt_secret(context, keypass, password)
+		self.clear_screen()
 		self.save_config(context, path, secret)
 		return True
 
@@ -72,6 +73,7 @@ class VaultManager:
 		res = self.encrypt_info(context, params['password'], keypass)
 		params['password'] = res['data']
 		params['hint'] = res['salt']
+		self.clear_screen()
 		self.save_account(context, params, path)
 		return True
 
@@ -80,7 +82,7 @@ class VaultManager:
 	def ask_password(self, context):
 		password = ""
 		while not password:
-			password = input("Enter password (visible): ")
+			password = self.safe_input("Enter password (visible): ")
 		return password
 
 	#------------------------------------
@@ -196,6 +198,18 @@ class VaultManager:
 		return data
 
 	# ------------------------------------
+	def safe_input(self, prompt=""):
+		result = input(prompt)
+		sys.stdout.write('\033[1A')
+		sys.stdout.write(
+			'\033[F                                                                                                           \n')
+		sys.stdout.write(
+			'                                                                                                           \n')
+		sys.stdout.flush()
+		return result
+
+
+	# ------------------------------------
 	@railway
 	def test_crypto(self, context):
 		cm = CryptoManager()
@@ -215,4 +229,5 @@ class VaultManager:
 		if decrypted != text: return context.setError(False, "Encryption failed")
 		print(f"Decrypted: {decrypted}")
 		return True
+
 

@@ -52,3 +52,4 @@ You use the same session to retrieve multiple accounts.
 ## Version History
 
 Version 1.01 - The initial release.
+Version 1.02 - Clears password from the screen.
